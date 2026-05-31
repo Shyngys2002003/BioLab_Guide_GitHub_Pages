@@ -1,0 +1,1480 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Виртуалды биология зертханалары</title>
+  <style>
+    :root {
+      --green: #0f8b5f;
+      --green-dark: #086345;
+      --blue: #1c6dd0;
+      --ink: #19312b;
+      --muted: #5f716d;
+      --paper: #ffffff;
+      --bg: #f2f8f5;
+      --line: #dbe8e1;
+      --soft: #e8f5ee;
+      --warn: #fff3d8;
+      --shadow: 0 14px 35px rgba(21, 74, 55, 0.12);
+      --radius: 22px;
+    }
+
+    * {
+      box-sizing: border-box;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.6;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .nav {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 14px 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      color: var(--green-dark);
+      white-space: nowrap;
+    }
+
+    .brand-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      color: white;
+      background: linear-gradient(135deg, #0f8b5f, #35b98c);
+      box-shadow: 0 8px 18px rgba(15, 139, 95, 0.25);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      padding: 8px 10px;
+      border-radius: 999px;
+    }
+
+    .nav-links a:hover {
+      background: var(--soft);
+      color: var(--green-dark);
+    }
+
+    .hero {
+      background:
+        radial-gradient(circle at 20% 20%, rgba(255,255,255,0.25), transparent 28%),
+        linear-gradient(135deg, #0b5c45 0%, #0f8b5f 45%, #2cb978 100%);
+      color: white;
+      padding: 72px 22px 56px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      width: 420px;
+      height: 420px;
+      right: -130px;
+      bottom: -160px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.12);
+    }
+
+    .hero-inner {
+      max-width: 1180px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1.25fr 0.75fr;
+      gap: 34px;
+      align-items: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 13px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.25);
+      font-size: 14px;
+      margin-bottom: 18px;
+    }
+
+    .hero h1 {
+      font-size: clamp(32px, 5vw, 58px);
+      line-height: 1.08;
+      margin: 0 0 18px;
+      letter-spacing: -1px;
+    }
+
+    .hero p {
+      max-width: 780px;
+      margin: 0 0 26px;
+      font-size: 18px;
+      opacity: 0.95;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border: 0;
+      border-radius: 14px;
+      padding: 12px 18px;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .btn-primary {
+      background: white;
+      color: var(--green-dark);
+      box-shadow: 0 10px 22px rgba(0,0,0,0.15);
+    }
+
+    .btn-ghost {
+      background: rgba(255,255,255,0.14);
+      color: white;
+      border: 1px solid rgba(255,255,255,0.34);
+    }
+
+
+    .update-banner {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 12px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: #fff3b0;
+      color: #174d36;
+      font-weight: 800;
+      box-shadow: 0 10px 22px rgba(0,0,0,0.12);
+      animation: pulseBanner 1.8s ease-in-out infinite;
+    }
+
+    @keyframes pulseBanner {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.035); }
+    }
+
+    .hero-card {
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.24);
+      border-radius: var(--radius);
+      padding: 24px;
+      box-shadow: 0 18px 45px rgba(0,0,0,0.16);
+    }
+
+    .hero-card h3 {
+      margin: 0 0 12px;
+      font-size: 22px;
+    }
+
+    .hero-card ul {
+      margin: 0;
+      padding-left: 18px;
+    }
+
+    .hero-card li {
+      margin: 9px 0;
+    }
+
+    main {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 34px 22px 60px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-top: -58px;
+      position: relative;
+      z-index: 3;
+    }
+
+    .stat {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: var(--shadow);
+    }
+
+    .stat b {
+      display: block;
+      font-size: 32px;
+      color: var(--green);
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .stat span {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    section.block {
+      margin-top: 46px;
+    }
+
+    .section-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 18px;
+      margin-bottom: 20px;
+    }
+
+    .section-title h2 {
+      margin: 0;
+      font-size: clamp(24px, 3vw, 36px);
+      color: var(--ink);
+    }
+
+    .section-title p {
+      max-width: 680px;
+      margin: 8px 0 0;
+      color: var(--muted);
+    }
+
+    .method-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .method-card,
+    .teacher-card,
+    .contact-card {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 22px;
+      box-shadow: var(--shadow);
+    }
+
+    .method-card h3,
+    .teacher-card h3,
+    .contact-card h3 {
+      margin: 0 0 10px;
+      color: var(--green-dark);
+    }
+
+    .method-card p,
+    .teacher-card p,
+    .contact-card p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .toolbar {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 16px;
+      display: grid;
+      grid-template-columns: 1.3fr 0.7fr 0.7fr;
+      gap: 12px;
+      box-shadow: var(--shadow);
+      margin-bottom: 18px;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 12px 14px;
+      font-size: 15px;
+      outline: none;
+      background: #fbfffd;
+      color: var(--ink);
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: #59c99b;
+      box-shadow: 0 0 0 4px rgba(89, 201, 155, 0.16);
+    }
+
+    .labs-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .lab-card {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      min-height: 390px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .lab-card::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 6px;
+      background: linear-gradient(90deg, var(--green), #72d6a6);
+    }
+
+    .lab-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+      padding-top: 4px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: var(--soft);
+      color: var(--green-dark);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .level {
+      font-size: 12px;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .lab-card h3 {
+      margin: 0 0 10px;
+      font-size: 20px;
+      color: var(--ink);
+    }
+
+    .lab-card p {
+      color: var(--muted);
+      margin: 0 0 14px;
+    }
+
+    .mini-list {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 16px;
+      color: #35514b;
+      font-size: 14px;
+    }
+
+    .mini-list li {
+      margin: 7px 0;
+      padding-left: 20px;
+      position: relative;
+    }
+
+    .mini-list li::before {
+      content: "✓";
+      color: var(--green);
+      position: absolute;
+      left: 0;
+      font-weight: 800;
+    }
+
+    .card-actions {
+      margin-top: auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .open-btn {
+      background: var(--green);
+      color: white;
+    }
+
+    .detail-btn {
+      background: #edf7f2;
+      color: var(--green-dark);
+    }
+
+    .program-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+
+    .week {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 18px;
+    }
+
+    .week b {
+      color: var(--green-dark);
+    }
+
+    .week p {
+      margin: 8px 0 0;
+      color: var(--muted);
+    }
+
+    .teacher-grid {
+      display: grid;
+      grid-template-columns: 0.9fr 1.1fr;
+      gap: 18px;
+    }
+
+    .rubric {
+      width: 100%;
+      border-collapse: collapse;
+      overflow: hidden;
+      border-radius: 16px;
+      background: white;
+      border: 1px solid var(--line);
+    }
+
+    .rubric th,
+    .rubric td {
+      padding: 12px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+      font-size: 14px;
+    }
+
+    .rubric th {
+      background: var(--green-dark);
+      color: white;
+    }
+
+    .rubric tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .guide-box {
+      background: var(--warn);
+      border: 1px solid #f2d893;
+      color: #6b4b00;
+      border-radius: 18px;
+      padding: 18px;
+      margin-top: 16px;
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+
+
+    .feedback-wrap {
+      display: grid;
+      grid-template-columns: 0.85fr 1.15fr;
+      gap: 18px;
+      align-items: stretch;
+    }
+
+    .contact-stack {
+      display: grid;
+      gap: 14px;
+    }
+
+    .feedback-panel {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, #ffffff 0%, #eefaf4 100%);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 24px;
+      box-shadow: var(--shadow);
+      min-height: 360px;
+    }
+
+    .feedback-panel::before {
+      content: "";
+      position: absolute;
+      width: 230px;
+      height: 230px;
+      right: -80px;
+      top: -80px;
+      border-radius: 50%;
+      background: rgba(15, 139, 95, 0.10);
+      animation: pulseGlow 4s ease-in-out infinite;
+    }
+
+    .feedback-panel h3 {
+      margin: 0 0 8px;
+      color: var(--green-dark);
+      position: relative;
+      z-index: 1;
+    }
+
+    .feedback-panel p {
+      color: var(--muted);
+      margin: 0 0 16px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .floating-cells {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .cell {
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: rgba(15, 139, 95, 0.18);
+      border: 2px solid rgba(15, 139, 95, 0.25);
+      animation: floatCell 9s ease-in-out infinite;
+    }
+
+    .cell:nth-child(1) { left: 9%; top: 76%; animation-delay: 0s; }
+    .cell:nth-child(2) { left: 33%; top: 84%; animation-delay: 1.5s; width: 14px; height: 14px; }
+    .cell:nth-child(3) { left: 62%; top: 78%; animation-delay: 3s; width: 22px; height: 22px; }
+    .cell:nth-child(4) { left: 82%; top: 70%; animation-delay: 4.5s; width: 12px; height: 12px; }
+
+    .rating-row {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin: 12px 0 14px;
+    }
+
+    .rating-btn {
+      border: 1px solid var(--line);
+      background: white;
+      border-radius: 16px;
+      padding: 10px 12px;
+      cursor: pointer;
+      font-size: 20px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+
+    .rating-btn:hover,
+    .rating-btn.active {
+      transform: translateY(-4px) scale(1.06);
+      border-color: #59c99b;
+      box-shadow: 0 10px 22px rgba(15, 139, 95, 0.18);
+    }
+
+    .feedback-panel textarea,
+    .feedback-panel input {
+      position: relative;
+      z-index: 1;
+      margin-bottom: 10px;
+      background: rgba(255,255,255,0.86);
+    }
+
+    .send-feedback {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      background: var(--green);
+      color: white;
+      margin-top: 2px;
+    }
+
+    .feedback-success {
+      position: relative;
+      z-index: 1;
+      display: none;
+      margin-top: 12px;
+      padding: 12px 14px;
+      border-radius: 16px;
+      background: #e6f8ef;
+      color: var(--green-dark);
+      font-weight: 700;
+      animation: popIn 0.35s ease;
+    }
+
+    .feedback-success.show {
+      display: block;
+    }
+
+    .confetti-piece {
+      position: absolute;
+      width: 8px;
+      height: 14px;
+      border-radius: 3px;
+      background: #72d6a6;
+      animation: confettiFall 1.2s ease forwards;
+      z-index: 3;
+    }
+
+    @keyframes floatCell {
+      0%, 100% { transform: translateY(0) translateX(0) scale(1); opacity: 0.45; }
+      50% { transform: translateY(-150px) translateX(24px) scale(1.18); opacity: 0.95; }
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% { transform: scale(1); opacity: 0.65; }
+      50% { transform: scale(1.12); opacity: 1; }
+    }
+
+    @keyframes popIn {
+      from { transform: scale(0.92); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    @keyframes confettiFall {
+      0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(130px) rotate(260deg); opacity: 0; }
+    }
+
+    footer {
+      background: #082f25;
+      color: white;
+      padding: 28px 22px;
+      text-align: center;
+    }
+
+    footer p {
+      margin: 0;
+      color: rgba(255,255,255,0.72);
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(5, 29, 23, 0.68);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 100;
+    }
+
+    .modal.show {
+      display: flex;
+    }
+
+    .modal-card {
+      width: min(860px, 100%);
+      max-height: 86vh;
+      overflow: auto;
+      background: white;
+      border-radius: 24px;
+      box-shadow: 0 22px 70px rgba(0,0,0,0.35);
+      padding: 24px;
+    }
+
+    .modal-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 18px;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 14px;
+      margin-bottom: 16px;
+    }
+
+    .modal-head h2 {
+      margin: 0;
+      color: var(--green-dark);
+    }
+
+    .close {
+      width: 38px;
+      height: 38px;
+      border: 0;
+      border-radius: 12px;
+      background: #f0f5f2;
+      cursor: pointer;
+      font-size: 22px;
+      color: var(--ink);
+    }
+
+    .modal-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+
+    .modal-section {
+      background: #f8fcfa;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 16px;
+    }
+
+    .modal-section h4 {
+      margin: 0 0 10px;
+      color: var(--green-dark);
+    }
+
+    .modal-section ol,
+    .modal-section ul {
+      margin: 0;
+      padding-left: 20px;
+    }
+
+    .modal-section li {
+      margin: 8px 0;
+    }
+
+    .empty {
+      display: none;
+      text-align: center;
+      color: var(--muted);
+      background: white;
+      border: 1px dashed var(--line);
+      border-radius: 18px;
+      padding: 30px;
+    }
+
+    @media (max-width: 940px) {
+      .hero-inner,
+      .teacher-grid,
+      .feedback-wrap,
+      .modal-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .stats,
+      .labs-grid,
+      .method-grid,
+      .contact-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .toolbar,
+      .program-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .nav {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .nav-links {
+        justify-content: flex-start;
+      }
+
+      .stats,
+      .labs-grid,
+      .method-grid,
+      .contact-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .card-actions {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="nav">
+      <div class="brand">
+        <div class="brand-icon">🧬</div>
+        <span>BioLab Guide</span>
+      </div>
+      <div class="nav-links">
+        <a href="#home">Басты бет</a>
+        <a href="#about">Жоба</a>
+        <a href="#labs">12 зертхана</a>
+        <a href="#program">12 сабақ</a>
+        <a href="#teachers">Мұғалімге</a>
+        <a href="#contact">Байланыс</a>
+      </div>
+    </div>
+  </div>
+
+  <header id="home" class="hero">
+    <div class="hero-inner">
+      <div>
+        <div class="update-banner">✅12 зертхана және анимациялы кері байланыс</div>
+        <h1>Мектептегі биология курсының жеке бөлімдерін оқытуда виртуалды зертханаларды қолдану</h1>
+        <p>
+          Бұл сайт биология сабақтарында қолдануға болатын виртуалды зертханаларды бір жерге жинақтап,
+          оқушыға да, мұғалімге де қадамдық нұсқаулық береді. Әр зертханада мақсат, қолдану жолы,
+          зерттеу сұрағы және бағалау бағыты көрсетілген.
+        </p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#labs">Зертханаларды көру</a>
+          <a class="btn btn-ghost" href="#program">12 сабақтық жоспар</a>
+        </div>
+      </div>
+      <div class="hero-card">
+        <h3>Сайттың негізгі идеясы</h3>
+        <ul>
+          <li>Виртуалды зертханаға тікелей өту</li>
+          <li>Қазақ тіліндегі қысқа нұсқаулық</li>
+          <li>Оқушыға арналған зерттеу сұрағы</li>
+          <li>Мұғалімге арналған бағалау критерийі</li>
+        </ul>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="stats" aria-label="Жоба көрсеткіштері">
+      <div class="stat"><b>12</b><span>виртуалды зертхана</span></div>
+      <div class="stat"><b>9</b><span>биология бөлімі</span></div>
+      <div class="stat"><b>12</b><span>сабаққа бейімделген</span></div>
+      <div class="stat"><b>100%</b><span>онлайн ашылатын ресурстар</span></div>
+    </div>
+
+    <section id="about" class="block">
+      <div class="section-title">
+        <div>
+          <h2>Жоба туралы</h2>
+          <p>
+            Өнімнің мақсаты — биология пәніндегі күрделі ұғымдарды тәжірибе арқылы түсіндіру.
+            Мысалы, оқушы ДНҚ бөліп алу, электрофорез, табиғи сұрыпталу, ELISA, нейрон импульсі
+            сияқты процестерді тек оқып қоймай, виртуалды ортада байқап көреді.
+          </p>
+        </div>
+      </div>
+      <div class="method-grid">
+        <article class="method-card">
+          <h3>1. Сабаққа дейін</h3>
+          <p>Мұғалім зертхананы таңдап, оқушыға мақсат пен негізгі сұрақты алдын ала береді.</p>
+        </article>
+        <article class="method-card">
+          <h3>2. Сабақ барысында</h3>
+          <p>Оқушылар нұсқаулық бойынша виртуалды тәжірибе жасап, бақылау нәтижесін жазады.</p>
+        </article>
+        <article class="method-card">
+          <h3>3. Сабақ соңында</h3>
+          <p>Қорытынды, дәлел, скриншот немесе қысқа есеп арқылы оқу нәтижесі бағаланады.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="labs" class="block">
+      <div class="section-title">
+        <div>
+          <h2>12 виртуалды зертхана</h2>
+          <p>Іздеу немесе бөлім бойынша сүзгілеу арқылы қажетті зертхананы таңдаңыз.</p>
+        </div>
+      </div>
+
+      <div class="toolbar">
+        <input id="searchInput" type="search" placeholder="Мысалы: ДНҚ, экология, эволюция, жүрек..." />
+        <select id="topicFilter">
+          <option value="all">Барлық бөлімдер</option>
+          <option value="Генетика">Генетика</option>
+          <option value="Цитология">Цитология</option>
+          <option value="Микробиология">Микробиология</option>
+          <option value="Адам физиологиясы">Адам физиологиясы</option>
+          <option value="Эволюция">Эволюция</option>
+          <option value="Экология">Экология</option>
+          <option value="Биотехнология">Биотехнология</option>
+          <option value="Өсімдіктер физиологиясы">Өсімдіктер физиологиясы</option>
+          <option value="Биохимия">Биохимия</option>
+        </select>
+        <select id="levelFilter">
+          <option value="all">Барлық сынып</option>
+          <option value="7-8">7–8 сынып</option>
+          <option value="9">9 сынып</option>
+          <option value="10-11">10–11 сынып</option>
+        </select>
+      </div>
+
+      <div id="labsGrid" class="labs-grid"></div>
+      <div id="emptyState" class="empty">Сүзгі бойынша зертхана табылмады. Басқа сөзбен іздеп көріңіз.</div>
+    </section>
+
+    <section id="program" class="block">
+      <div class="section-title">
+        <div>
+          <h2>12 виртуальды зертхананы сабаққа енгізу үлгісі</h2>
+        </div>
+      </div>
+      <div class="program-grid">
+        <div class="week"><b>1-сабақ. Жасуша және генетикалық материал</b><p>DNA Extraction зертханасы арқылы ДНҚ-ның жасушадан бөлініп алыну кезеңдерін түсіндіру.</p></div>
+        <div class="week"><b>2-сабақ. ДНҚ фрагменттерін талдау</b><p>Gel Electrophoresis арқылы ДНҚ бөліктерінің ұзындығына қарай ажырауын бақылау.</p></div>
+        <div class="week"><b>3-сабақ. Ген экспрессиясы</b><p>Gene Expression Essentials арқылы ақуыз түзілуіне әсер ететін факторларды талдау.</p></div>
+        <div class="week"><b>4-сабақ. Бактерияларды анықтау</b><p>Bacterial Identification зертханасында PCR, секвенирлеу және дерекқормен салыстыру жолын қарастыру.</p></div>
+        <div class="week"><b>5-сабақ. Иммундық жауап</b><p>Immunology Virtual Lab арқылы ELISA әдісінің логикасын және ауру белгілерін анықтау.</p></div>
+        <div class="week"><b>6-сабақ. Қанайналым жүйесі</b><p>Cardiology Virtual Lab арқылы жүрек ауруларын диагностикалау деректерін түсіндіру.</p></div>
+        <div class="week"><b>7-сабақ. Жүйке жүйесі</b><p>Neurophysiology Virtual Lab арқылы нейрон белсенділігін тіркеу және сигналды талдау.</p></div>
+        <div class="week"><b>8-сабақ. Табиғи сұрыпталу</b><p>PhET Natural Selection арқылы орта факторы өзгергенде популяциядағы белгілердің өзгеруін бақылау.</p></div>
+        <div class="week"><b>9-сабақ. Эволюциялық дәлелдер</b><p>Stickleback Evolution зертханасы арқылы қазба дерек пен қазіргі популяцияны салыстыру.</p></div>
+        <div class="week"><b>10-сабақ. Экожүйе және биоалуантүрлілік</b><p>Virtual Biology Lab арқылы түр саны, орта жағдайы және тепе-теңдік арасындағы байланысты талдау.</p></div>
+        <div class="week"><b>11-сабақ. Фотосинтез және жасушалық тыныс алу</b><p>LabXchange зертханасы арқылы жарық пен қараңғы жағдайында өсімдік әрекетін BTB индикаторы арқылы бақылау.</p></div>
+        <div class="week"><b>12-сабақ. Фермент белсенділігі</b><p>LabXchange Enzyme Activity Lab арқылы pH өзгерісі фермент жұмысына қалай әсер ететінін зерттеу.</p></div>
+      </div>
+    </section>
+
+    <section id="teachers" class="block">
+      <div class="section-title">
+        <div>
+          <h2>Мұғалімге арналған әдістемелік бөлім</h2>
+          <p>Бұл бөлім сабақ жоспарына, практикалық жұмысқа және оқушы есебін бағалауға көмектеседі.</p>
+        </div>
+      </div>
+
+      <div class="teacher-grid">
+        <article class="teacher-card">
+          <h3>Сабақта қолдану алгоритмі</h3>
+          <ol>
+            <li>Тақырыпқа сәйкес виртуалды зертхананы таңдау.</li>
+            <li>Оқушыға зерттеу сұрағын беру.</li>
+            <li>Нұсқаулық бойынша виртуалды тәжірибені орындау.</li>
+            <li>Нәтижені кестеге немесе қысқа есепке түсіру.</li>
+            <li>Қорытындыны дәлелмен қорғау.</li>
+          </ol>
+          <div class="guide-box">
+            <b>Ескерту:</b> сайттағы зертханалар сыртқы платформаларда ашылады. Сабақ алдында мұғалім интернет жылдамдығын және браузерде ашылуын тексеріп алғаны дұрыс.
+          </div>
+        </article>
+
+        <article class="teacher-card">
+          <h3>Бағалау критерийі</h3>
+          <table class="rubric">
+            <thead>
+              <tr>
+                <th>Критерий</th>
+                <th>Дескриптор</th>
+                <th>Ұпай</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Мақсатты түсіну</td>
+                <td>Зертхананың мақсатын және зерттеу сұрағын дұрыс түсіндіреді.</td>
+                <td>2</td>
+              </tr>
+              <tr>
+                <td>Нұсқаулықпен жұмыс</td>
+                <td>Қадамдарды дұрыс орындап, негізгі бақылауды тіркейді.</td>
+                <td>3</td>
+              </tr>
+              <tr>
+                <td>Деректі талдау</td>
+                <td>Нәтижені биологиялық ұғыммен байланыстырып түсіндіреді.</td>
+                <td>3</td>
+              </tr>
+              <tr>
+                <td>Қорытынды</td>
+                <td>Өз қорытындысын дәлелмен және нақты мысалмен жазады.</td>
+                <td>2</td>
+              </tr>
+            </tbody>
+          </table>
+        </article>
+      </div>
+    </section>
+
+    <section id="contact" class="block">
+      <div class="section-title">
+        <div>
+          <h2>Байланыс және анимациялы кері байланыс</h2>
+        </div>
+      </div>
+      <div class="feedback-wrap">
+        <div class="contact-stack">
+          <div class="contact-card"><h3>Автор</h3><p>Сатауова Аяулым Талғатқызы</p><p>Ысқақ Нұрай Ерболқызы</p></div>
+          <div class="contact-card"><h3>Ғылыми жетекші</h3><p>Абай атындағы Қазақ ұлттық педагогикалық университеті биология кафедрасының PhD, аға оқытушысы                        Р.Ж.Джунусова</p></div>
+          <div class="contact-card"><h3>Email</h3><p><a href="mailto:info@biologylab.kz">info@biologylab.kz</a></p></div>
+        </div>
+
+        <div class="feedback-panel" id="feedbackPanel">
+          <div class="floating-cells" aria-hidden="true">
+            <span class="cell"></span>
+            <span class="cell"></span>
+            <span class="cell"></span>
+            <span class="cell"></span>
+          </div>
+          <h3>🧪 Зертхана бойынша қысқа пікір қалдыру</h3>
+          <input id="feedbackName" type="text" placeholder="Атыңыз немесе сыныбыңыз" />
+          <div class="rating-row" aria-label="Бағалау таңдау">
+            <button class="rating-btn" type="button" data-rate="1">😐</button>
+            <button class="rating-btn" type="button" data-rate="2">🙂</button>
+            <button class="rating-btn" type="button" data-rate="3">😍</button>
+            <button class="rating-btn" type="button" data-rate="4">🚀</button>
+          </div>
+          <textarea id="feedbackText" rows="4" placeholder="Мысалы: Маған ДНҚ зертханасы ұнады, себебі тәжірибе қадамдары түсінікті болды..."></textarea>
+          <button class="btn send-feedback" id="sendFeedback" type="button">Пікірді жіберу</button>
+          <div class="feedback-success" id="feedbackSuccess">Рақмет! Пікір сақталғандай көрсетілді. Нақты сайтқа қосқанда бұл форма Google Form немесе базаға жалғанады.</div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>© 2026 BioLab Guide. Биологияны виртуалды зертхана арқылы оқытуға арналған электронды өнім.</p>
+  </footer>
+
+  <div id="modal" class="modal" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <div class="modal-head">
+        <div>
+          <span id="modalBadge" class="badge"></span>
+          <h2 id="modalTitle"></h2>
+          <p id="modalDesc"></p>
+        </div>
+        <button class="close" id="closeModal" aria-label="Жабу">×</button>
+      </div>
+      <div class="modal-grid">
+        <div class="modal-section">
+          <h4>Қадамдық нұсқаулық</h4>
+          <ol id="modalSteps"></ol>
+        </div>
+        <div class="modal-section">
+          <h4>Оқушыға тапсырма</h4>
+          <ul id="modalTasks"></ul>
+        </div>
+      </div>
+      <div style="margin-top:16px; display:flex; gap:10px; flex-wrap:wrap;">
+        <a id="modalLink" class="btn open-btn" href="#" target="_blank" rel="noopener">Зертхананы ашу</a>
+        <button class="btn detail-btn" onclick="window.print()">Осы нұсқаулықты басып шығару</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const labs = [
+      {
+        title: "DNA Extraction Virtual Lab",
+        platform: "Learn.Genetics",
+        topic: "Генетика",
+        level: "9, 10-11",
+        url: "https://learn.genetics.utah.edu/content/labs/extraction/",
+        desc: "Адам жасушасынан ДНҚ бөліп алу процесін виртуалды түрде орындауға арналған зертхана.",
+        aim: "ДНҚ-ны жасушадан бөліп алу кезеңдерін түсіндіру.",
+        tools: "Виртуалды пробирка, реагенттер, жасуша үлгісі",
+        result: "Оқушы ДНҚ экстракциясының негізгі кезеңдерін атайды.",
+        steps: [
+          "Сілтеме арқылы зертхананы ашыңыз.",
+          "Cheek swab немесе жасуша үлгісін таңдап, экрандағы әрекеттерді орындаңыз.",
+          "Әр реагенттің не үшін қосылатынын дәптерге қысқаша жазыңыз.",
+          "Соңында ДНҚ-ның бөліну кезеңдерін ретімен көрсетіңіз."
+        ],
+        tasks: [
+          "ДНҚ не үшін жасушадан бөлініп алынады?",
+          "Қай кезеңде жасуша қабықшасы бұзылады?",
+          "Бұл тәжірибені криминалистикамен қалай байланыстыруға болады?"
+        ]
+      },
+      {
+        title: "Gel Electrophoresis Virtual Lab",
+        platform: "Learn.Genetics",
+        topic: "Биотехнология",
+        level: "10-11",
+        url: "https://learn.genetics.utah.edu/content/labs/gel/",
+        desc: "ДНҚ фрагменттерін гель арқылы бөліп, олардың ұзындығын салыстыруға мүмкіндік береді.",
+        aim: "ДНҚ бөліктерінің электр өрісінде қозғалуын және өлшеміне қарай ажырауын түсіндіру.",
+        tools: "Гель, ДНҚ үлгілері, буфер, электр көзі",
+        result: "Оқушы электрофорез нәтижесіндегі жолақтарды түсіндіреді.",
+        steps: [
+          "Гель-электрофорез зертханасын ашыңыз.",
+          "ДНҚ үлгілерін ұяшықтарға орналастырыңыз.",
+          "Электр өрісін қосып, фрагменттердің қозғалысын бақылаңыз.",
+          "Қысқа және ұзын фрагменттердің орналасуын салыстырыңыз."
+        ],
+        tasks: [
+          "Неліктен қысқа ДНҚ фрагменті алысырақ қозғалады?",
+          "Бұл әдіс медицинада немесе криминалистикада қалай қолданылады?",
+          "Жолақтардың айырмашылығы нені білдіреді?"
+        ]
+      },
+      {
+        title: "Gene Expression Essentials",
+        platform: "PhET",
+        topic: "Цитология",
+        level: "9, 10-11",
+        url: "https://phet.colorado.edu/en/simulations/gene-expression-essentials",
+        desc: "Ген экспрессиясы, транскрипция және трансляция үдерістерін модельдеу.",
+        aim: "Геннен ақуыз түзілу жолын және оған әсер ететін факторларды түсіндіру.",
+        tools: "PhET симуляциясы, ген, РНҚ-полимераза, рибосома",
+        result: "Оқушы ген экспрессиясының негізгі кезеңдерін байланыстырып түсіндіреді.",
+        steps: [
+          "PhET симуляциясын ашып, Intro бөлімінен бастаңыз.",
+          "Транскрипция кезінде РНҚ түзілуін бақылаңыз.",
+          "Трансляция кезеңінде ақуыз түзілуін қараңыз.",
+          "Параметрлерді өзгертіп, ақуыз санының өзгерісін салыстырыңыз."
+        ],
+        tasks: [
+          "Ген экспрессиясы дегеніміз не?",
+          "Қандай фактор ақуыз түзілуін арттыра алады?",
+          "Транскрипция мен трансляцияның айырмашылығын жазыңыз."
+        ]
+      },
+      {
+        title: "Bacterial Identification Virtual Lab",
+        platform: "HHMI BioInteractive",
+        topic: "Микробиология",
+        level: "10-11",
+        url: "https://www.biointeractive.org/classroom-resources/bacterial-identification-virtual-lab",
+        desc: "Бактерия түрін ДНҚ тізбегі арқылы анықтау әдістерін көрсететін модульдік зертхана.",
+        aim: "Бактерияны анықтауда ДНҚ, PCR, секвенирлеу және дерекқордың рөлін түсіндіру.",
+        tools: "ДНҚ үлгісі, PCR, секвенирлеу, салыстыру дерекқоры",
+        result: "Оқушы бактерияны молекулалық әдіспен анықтау логикасын түсіндіреді.",
+        steps: [
+          "Зертхананы ашып, Introduction бөлімін оқыңыз.",
+          "Бактерия ДНҚ-сын бөліп алу кезеңін орындаңыз.",
+          "PCR және секвенирлеу нәтижесін бақылаңыз.",
+          "Алынған тізбекті дерекқормен салыстырып, бактерия түрін анықтаңыз."
+        ],
+        tasks: [
+          "Бактерияны сыртқы белгісімен ғана анықтау неге жеткіліксіз?",
+          "PCR не үшін қолданылады?",
+          "ДНҚ тізбегі арқылы түрді анықтаудың артықшылығын жазыңыз."
+        ]
+      },
+      {
+        title: "Immunology Virtual Lab",
+        platform: "HHMI BioInteractive",
+        topic: "Адам физиологиясы",
+        level: "9, 10-11",
+        url: "https://www.biointeractive.org/classroom-resources/immunology-virtual-lab",
+        desc: "ELISA әдісі арқылы қан үлгілерінен ауру белгісін анықтауды үйретеді.",
+        aim: "Антиген-антидене байланысы және ELISA диагностикасының маңызын түсіндіру.",
+        tools: "Қан үлгілері, планшет, реагенттер, индикатор",
+        result: "Оқушы иммунологиялық тест нәтижесін талдайды.",
+        steps: [
+          "Зертхананы ашып, ELISA әдісі туралы кіріспені оқыңыз.",
+          "Қан үлгілерін планшетке орналастырыңыз.",
+          "Реагенттерді ретімен қосып, түстің өзгеруін бақылаңыз.",
+          "Нәтижені оң және теріс бақылаумен салыстырыңыз."
+        ],
+        tasks: [
+          "ELISA әдісі қандай биологиялық байланысқа негізделеді?",
+          "Түстің өзгеруі нені білдіреді?",
+          "Оң бақылау мен теріс бақылау не үшін қажет?"
+        ]
+      },
+      {
+        title: "Cardiology Virtual Lab",
+        platform: "HHMI BioInteractive",
+        topic: "Адам физиологиясы",
+        level: "8, 9, 10-11",
+        url: "https://www.biointeractive.org/classroom-resources/cardiology-virtual-lab",
+        desc: "Жүрек ауруларын анықтауда қолданылатын медициналық тексеру әдістерін модельдейді.",
+        aim: "Жүрек жұмысы, диагностика және тұқымқуалаушылық белгілер арасындағы байланысты түсіндіру.",
+        tools: "Стетоскоп, эхокардиограмма, MRI, шежіре кестесі",
+        result: "Оқушы пациент деректерін талдап, ықтимал диагноз ұсынады.",
+        steps: [
+          "Зертхананы ашып, пациент туралы ақпаратпен танысыңыз.",
+          "Аускультация, эхокардиограмма және MRI нәтижелерін қараңыз.",
+          "Шежіре кестесін талдап, тұқымқуалаушылық байланысын анықтаңыз.",
+          "Деректерге сүйеніп қорытынды диагноз жасаңыз."
+        ],
+        tasks: [
+          "Жүрек ауруын анықтауда бірнеше дерек не үшін қажет?",
+          "Шежіре кестесі қандай ақпарат береді?",
+          "Диагнозды дәлелдеуге қандай белгі көбірек көмектесті?"
+        ]
+      },
+      {
+        title: "Neurophysiology Virtual Lab",
+        platform: "HHMI BioInteractive",
+        topic: "Адам физиологиясы",
+        level: "10-11",
+        url: "https://www.biointeractive.org/classroom-resources/neurophysiology-virtual-lab",
+        desc: "Нейрондардың электрлік белсенділігін анықтау және тіркеу тәсілдерін көрсетеді.",
+        aim: "Жүйке импульсі мен нейрон белсенділігін тәжірибелік дерек арқылы түсіндіру.",
+        tools: "Микроэлектрод, жүйке жасушасы, тіркеу графигі",
+        result: "Оқушы нейрон сигналын график арқылы сипаттайды.",
+        steps: [
+          "Зертхананы ашып, leech моделіндегі жүйке жүйесімен танысыңыз.",
+          "Электродты орналастырып, сигнал тіркеу әрекетін орындаңыз.",
+          "Графиктегі электрлік белсенділікті бақылаңыз.",
+          "Стимул мен нейрон жауабы арасындағы байланысты түсіндіріңіз."
+        ],
+        tasks: [
+          "Нейрон сигналын неге электрлік құбылыс ретінде қарастырамыз?",
+          "Графиктегі өзгеріс нені көрсетеді?",
+          "Стимул өзгерсе, жауап қалай өзгеруі мүмкін?"
+        ]
+      },
+      {
+        title: "Natural Selection Simulation",
+        platform: "PhET",
+        topic: "Эволюция",
+        level: "7-8, 9",
+        url: "https://phet.colorado.edu/en/simulations/natural-selection",
+        desc: "Қоршаған орта факторы өзгергенде белгілердің популяцияда таралуын зерттейді.",
+        aim: "Табиғи сұрыпталудың популяциядағы белгі жиілігіне әсерін түсіндіру.",
+        tools: "Қоян популяциясы, орта факторы, мутация, сұрыпталу агенті",
+        result: "Оқушы табиғи сұрыпталудың нақты модельдегі көрінісін түсіндіреді.",
+        steps: [
+          "PhET симуляциясын ашыңыз.",
+          "Қоян популяциясына белгі немесе мутация қосыңыз.",
+          "Орта жағдайын және сұрыпталу агентін өзгертіңіз.",
+          "Бірнеше ұрпақтан кейін белгі жиілігінің қалай өзгергенін бақылаңыз."
+        ],
+        tasks: [
+          "Қай белгі тіршілік етуге көбірек көмектесті?",
+          "Орта өзгерсе, пайдалы белгі де өзгеруі мүмкін бе?",
+          "Табиғи сұрыпталуды бір сөйлеммен түсіндіріңіз."
+        ]
+      },
+      {
+        title: "Stickleback Evolution Virtual Lab",
+        platform: "HHMI BioInteractive",
+        topic: "Эволюция",
+        level: "10-11",
+        url: "https://www.biointeractive.org/classroom-resources/stickleback-evolution-virtual-lab",
+        desc: "Тікенекті балықтар мен қазба үлгілері арқылы эволюциялық процестерді талдайды.",
+        aim: "Қазба деректер мен қазіргі популяция белгілерін салыстырып, эволюциялық өзгерісті дәлелдеу.",
+        tools: "Балық үлгілері, қазба дерек, өлшеу және салыстыру кестесі",
+        result: "Оқушы эволюциялық өзгерісті дерек арқылы дәлелдейді.",
+        steps: [
+          "Зертхананы ашып, зерттеу мәселесімен танысыңыз.",
+          "Балық үлгілеріндегі белгілерді бақылаңыз және өлшеңіз.",
+          "Қазба және қазіргі үлгілерді салыстырыңыз.",
+          "Өзгерістің мүмкін себебін қоршаған ортамен байланыстырыңыз."
+        ],
+        tasks: [
+          "Қандай белгі эволюциялық өзгерісті көрсетеді?",
+          "Қазба деректер не үшін маңызды?",
+          "Өз қорытындыңызды кемінде екі дерекпен дәлелдеңіз."
+        ]
+      },
+      {
+        title: "Biodiversity Ecology Models",
+        platform: "Virtual Biology Lab",
+        topic: "Экология",
+        level: "7-8, 9, 10-11",
+        url: "https://virtualbiologylab.org/biodiversity-ecology/",
+        desc: "Биоалуантүрлілік, экожүйе тепе-теңдігі және орта факторларын модельдеуге арналған ресурс.",
+        aim: "Экожүйедегі түрлер саны мен орта жағдайының байланысын түсіндіру.",
+        tools: "Экологиялық модель, түр саны, орта параметрлері",
+        result: "Оқушы биоалуантүрлілік пен тұрақтылық арасындағы байланысты талдайды.",
+        steps: [
+          "Biodiversity Ecology бөлімін ашыңыз.",
+          "Модельдің параметрлерімен танысыңыз.",
+          "Түр саны немесе орта жағдайын өзгертіп, нәтижені бақылаңыз.",
+          "Экожүйе тұрақтылығына әсер ететін факторларды жазыңыз."
+        ],
+        tasks: [
+          "Биоалуантүрлілік азайса, экожүйеде не өзгеруі мүмкін?",
+          "Қай параметр нәтижеге көбірек әсер етті?",
+          "Модель нәтижесін нақты табиғи ортаға байланыстырыңыз."
+        ]
+      },
+      {
+        title: "Photosynthesis and Cellular Respiration",
+        platform: "LabXchange",
+        topic: "Өсімдіктер физиологиясы",
+        level: "7-8, 9, 10-11",
+        url: "https://about.labxchange.org/sim-landing-page/photosynthesis-and-cellular-respiration",
+        desc: "Фотосинтез бен жасушалық тыныс алуды BTB индикаторы және спектрофотометр арқылы зерттейтін виртуалды зертхана.",
+        aim: "Жарық пен қараңғы жағдайында өсімдіктің фотосинтез және тыныс алу үдерістерін салыстыру.",
+        tools: "BTB индикаторы, өсімдік үлгісі, жарық көзі, спектрофотометр",
+        result: "Оқушы фотосинтез бен тыныс алудың айырмашылығын тәжірибе нәтижесімен түсіндіреді.",
+        steps: [
+          "LabXchange зертханасын ашып, Launch Simulation батырмасын таңдаңыз.",
+          "Өсімдікті жарық немесе қараңғы жағдайға орналастырыңыз.",
+          "BTB түсінің өзгерісін және absorbance графигін бақылаңыз.",
+          "Жарық жағдайындағы нәтижені қараңғы жағдайдағы нәтижемен салыстырыңыз."
+        ],
+        tasks: [
+          "Жарықта BTB түсі неге өзгеруі мүмкін?",
+          "Фотосинтез бен тыныс алу бір уақытта жүре ала ма?",
+          "Графиктегі өзгерісті көмірқышқыл газы мөлшерімен байланыстырып түсіндіріңіз."
+        ]
+      },
+      {
+        title: "Enzyme Activity Lab",
+        platform: "LabXchange",
+        topic: "Биохимия",
+        level: "9, 10-11",
+        url: "https://about.labxchange.org/sim-landing-page/enzyme-activity-lab",
+        desc: "pH деңгейінің фермент белсенділігіне әсерін қауіпсіз виртуалды ортада тексеруге арналған зертхана.",
+        aim: "Фермент белсенділігіне pH факторының әсерін тәжірибе арқылы анықтау.",
+        tools: "Фермент, субстрат, pH ерітінділері, түс индикаторы, absorbance өлшемі",
+        result: "Оқушы фермент жұмысының орта жағдайына тәуелді екенін дәлелдейді.",
+        steps: [
+          "Enzyme Activity Lab бетін ашып, симуляцияны іске қосыңыз.",
+          "Әртүрлі pH мәндерін таңдап, реакция жүруін бақылаңыз.",
+          "Түстің өзгеруі мен absorbance көрсеткішін салыстырыңыз.",
+          "Қай pH жағдайында фермент белсенділігі жоғары болғанын қорытындылаңыз."
+        ],
+        tasks: [
+          "Фермент белсенділігі pH өзгергенде неге өзгереді?",
+          "Оптимум pH дегенді қалай түсінесіз?",
+          "Бұл тәжірибені ас қорыту ферменттерімен байланыстырып түсіндіріңіз."
+        ]
+      }
+    ];
+
+    const labsGrid = document.getElementById("labsGrid");
+    const searchInput = document.getElementById("searchInput");
+    const topicFilter = document.getElementById("topicFilter");
+    const levelFilter = document.getElementById("levelFilter");
+    const emptyState = document.getElementById("emptyState");
+
+    function renderLabs() {
+      const query = searchInput.value.toLowerCase().trim();
+      const topic = topicFilter.value;
+      const level = levelFilter.value;
+
+      const filtered = labs.filter(lab => {
+        const text = `${lab.title} ${lab.platform} ${lab.topic} ${lab.desc} ${lab.aim}`.toLowerCase();
+        const matchesQuery = text.includes(query);
+        const matchesTopic = topic === "all" || lab.topic === topic;
+        const matchesLevel = level === "all" || lab.level.includes(level);
+        return matchesQuery && matchesTopic && matchesLevel;
+      });
+
+      labsGrid.innerHTML = filtered.map((lab, index) => `
+        <article class="lab-card">
+          <div class="lab-meta">
+            <span class="badge">${lab.topic}</span>
+            <span class="level">${lab.level} сынып</span>
+          </div>
+          <h3>${lab.title}</h3>
+          <p>${lab.desc}</p>
+          <ul class="mini-list">
+            <li><b>Платформа:</b> ${lab.platform}</li>
+            <li><b>Мақсаты:</b> ${lab.aim}</li>
+            <li><b>Нәтиже:</b> ${lab.result}</li>
+          </ul>
+          <div class="card-actions">
+            <button class="btn detail-btn" onclick="openModal(${labs.indexOf(lab)})">Нұсқаулық</button>
+            <a class="btn open-btn" href="${lab.url}" target="_blank" rel="noopener">Ашу</a>
+          </div>
+        </article>
+      `).join("");
+
+      emptyState.style.display = filtered.length ? "none" : "block";
+    }
+
+    const modal = document.getElementById("modal");
+    const closeModal = document.getElementById("closeModal");
+
+    function openModal(index) {
+      const lab = labs[index];
+      document.getElementById("modalBadge").textContent = `${lab.topic} • ${lab.platform}`;
+      document.getElementById("modalTitle").textContent = lab.title;
+      document.getElementById("modalDesc").textContent = lab.desc;
+      document.getElementById("modalSteps").innerHTML = lab.steps.map(step => `<li>${step}</li>`).join("");
+      document.getElementById("modalTasks").innerHTML = lab.tasks.map(task => `<li>${task}</li>`).join("");
+      document.getElementById("modalLink").href = lab.url;
+      modal.classList.add("show");
+    }
+
+    closeModal.addEventListener("click", () => modal.classList.remove("show"));
+    modal.addEventListener("click", (event) => {
+      if (event.target === modal) modal.classList.remove("show");
+    });
+
+    searchInput.addEventListener("input", renderLabs);
+    topicFilter.addEventListener("change", renderLabs);
+    levelFilter.addEventListener("change", renderLabs);
+
+
+    const ratingButtons = document.querySelectorAll(".rating-btn");
+    const feedbackPanel = document.getElementById("feedbackPanel");
+    const feedbackSuccess = document.getElementById("feedbackSuccess");
+    let selectedRate = "";
+
+    ratingButtons.forEach(btn => {
+      btn.addEventListener("click", () => {
+        ratingButtons.forEach(item => item.classList.remove("active"));
+        btn.classList.add("active");
+        selectedRate = btn.dataset.rate;
+      });
+    });
+
+    function createConfetti() {
+      for (let i = 0; i < 22; i++) {
+        const piece = document.createElement("span");
+        piece.className = "confetti-piece";
+        piece.style.left = Math.random() * 92 + "%";
+        piece.style.top = "52%";
+        piece.style.background = ["#72d6a6", "#0f8b5f", "#f1c40f", "#1c6dd0"][Math.floor(Math.random() * 4)];
+        piece.style.animationDelay = Math.random() * 0.25 + "s";
+        feedbackPanel.appendChild(piece);
+        setTimeout(() => piece.remove(), 1400);
+      }
+    }
+
+    document.getElementById("sendFeedback").addEventListener("click", () => {
+      const name = document.getElementById("feedbackName").value.trim();
+      const text = document.getElementById("feedbackText").value.trim();
+      feedbackSuccess.textContent = name
+        ? `${name}, рақмет! Пікіріңіз қабылданды. ${selectedRate ? "Баға: " + selectedRate + "/4" : ""}`
+        : `Рақмет! Пікіріңіз қабылданды. ${selectedRate ? "Баға: " + selectedRate + "/4" : ""}`;
+      feedbackSuccess.classList.add("show");
+      createConfetti();
+      if (text.length > 0) {
+        document.getElementById("feedbackText").value = "";
+      }
+    });
+
+
+    renderLabs();
+  </script>
+</body>
+</html>
